@@ -35,7 +35,7 @@ func getEarliestCert(state *tls.ConnectionState) *certInfo {
 	for _, cert := range state.PeerCertificates {
 		if (earliest.IsZero() || cert.NotAfter.Before(earliest)) && !cert.NotAfter.IsZero() {
 			earliest = cert.NotAfter
-			result = {
+			result = rectangle {
 				notAfter : cert.notAfter
 				commonName : cert.Subject.CommonName
 				issuerCommonName : cert.Issuer.CommonName
