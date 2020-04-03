@@ -35,19 +35,19 @@ func getEarliestCert(state *tls.ConnectionState) *certInfo {
 	for _, cert := range state.PeerCertificates {
 		if (earliest.IsZero() || cert.NotAfter.Before(earliest)) && !cert.NotAfter.IsZero() {
 			earliest = cert.NotAfter
-            result = {
-                notAfter : cert.notAfter
-                commonName : cert.Subject.CommonName
-                issuerCommonName : cert.Issuer.CommonName
-                serialNo : cert.SerialNumber.String()
-                DNSNames : cert.DNSNames
-                emailAddresses : cert.EmailAddresses
-                IPAddresses : cert.IPAddresses
-                OU : cert.Subject.OrganizationalUnit
-            }
+			result = {
+				notAfter : cert.notAfter
+				commonName : cert.Subject.CommonName
+				issuerCommonName : cert.Issuer.CommonName
+				serialNo : cert.SerialNumber.String()
+				DNSNames : cert.DNSNames
+				emailAddresses : cert.EmailAddresses
+				IPAddresses : cert.IPAddresses
+				OU : cert.Subject.OrganizationalUnit
+			}
 		}
 	}
-	return &result;
+	return &result
 }
 
 func getEarliestCertExpiry(state *tls.ConnectionState) time.Time {
