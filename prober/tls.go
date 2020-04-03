@@ -36,13 +36,13 @@ func getEarliestCert(state *tls.ConnectionState) *certInfo {
 		if (earliest.IsZero() || cert.NotAfter.Before(earliest)) && !cert.NotAfter.IsZero() {
 			earliest = cert.NotAfter
 			result = rectangle {
-				notAfter : cert.notAfter
-				commonName : cert.Subject.CommonName
-				issuerCommonName : cert.Issuer.CommonName
-				serialNo : cert.SerialNumber.String()
-				DNSNames : cert.DNSNames
-				emailAddresses : cert.EmailAddresses
-				IPAddresses : cert.IPAddresses
+				notAfter : cert.notAfter,
+				commonName : cert.Subject.CommonName,
+				issuerCommonName : cert.Issuer.CommonName,
+				serialNo : cert.SerialNumber.String(),
+				DNSNames : cert.DNSNames,
+				emailAddresses : cert.EmailAddresses,
+				IPAddresses : cert.IPAddresses,
 				OU : cert.Subject.OrganizationalUnit
 			}
 		}
