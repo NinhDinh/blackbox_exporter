@@ -558,7 +558,14 @@ func ProbeHTTP(ctx context.Context, target string, module config.Module, registr
 		probeSSLEarliestCertExpiryGauge.Set(float64(getEarliestCertExpiry(resp.TLS).Unix()))
 		probeTLSVersion.WithLabelValues(getTLSVersion(resp.TLS)).Set(1)
 		cert := getEarliestCert(resp.TLS)
-		probeTLSCert.With(prometheus.Labels{"cn": cert.commonName, "san": cert.DNSNames, "issuer": cert.issuerCommonName, "email": cert.emailAddresses, "ou": cert.OU, "serial": cert.serialNo})
+		probeTLSCert.With(
+			prometheus.Labels{
+				"cn":     cert.commonName,
+				"san":    cert.DNSNames,
+				"issuer": cert.issuerCommonName,
+				"email":  cert.emailAddresses,
+				"ou":     cert.OU,
+				"serial": cert.serialNo}).Set(1)
 		if httpConfig.FailIfSSL {
 			level.Error(logger).Log("msg", "Final request was over SSL")
 			success = false
