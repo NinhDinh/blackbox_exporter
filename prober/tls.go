@@ -31,7 +31,7 @@ type certInfo struct {
 
 func getEarliestCert(state *tls.ConnectionState) *certInfo {
 	earliest := time.Time{}
-	var result := certInfo{}
+	result := certInfo{}
 	for _, cert := range state.PeerCertificates {
 		if (earliest.IsZero() || cert.NotAfter.Before(earliest)) && !cert.NotAfter.IsZero() {
 			earliest = cert.NotAfter
