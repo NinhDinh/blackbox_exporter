@@ -18,6 +18,38 @@ import (
 	"time"
 )
 
+type certInfo struct {
+	notAfter     time.Time
+	commonName 	string
+	issuerCommonName string
+	serialNo 	string
+	DNSNames 	string
+	emailAddresses 	string
+	IPAddresses 	string
+	OU 		string
+}
+
+func getEarliestCert(state *tls.ConnectionState) *certInfo {
+	earliest := time.Time{}
+	var result := certInfo{}
+	for _, cert := range state.PeerCertificates {
+		if (earliest.IsZero() || cert.NotAfter.Before(earliest)) && !cert.NotAfter.IsZero() {
+			earliest = cert.NotAfter
+            result = {
+                notAfter : cert.notAfter
+                commonName : cert.Subject.CommonName
+                issuerCommonName : cert.Issuer.CommonName
+                serialNo : cert.SerialNumber.String()
+                DNSNames : cert.DNSNames
+                emailAddresses : cert.EmailAddresses
+                IPAddresses : cert.IPAddresses
+                OU : cert.Subject.OrganizationalUnit
+            }
+		}
+	}
+	return &result;
+}
+
 func getEarliestCertExpiry(state *tls.ConnectionState) time.Time {
 	earliest := time.Time{}
 	for _, cert := range state.PeerCertificates {
