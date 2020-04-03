@@ -15,18 +15,18 @@ package prober
 
 import (
 	"crypto/tls"
+	"strings"
 	"time"
 )
 
 type certInfo struct {
-	notAfter     time.Time
-	commonName 	string
+	notAfter         time.Time
+	commonName       string
 	issuerCommonName string
-	serialNo 	string
-	DNSNames 	string
-	emailAddresses 	string
-	IPAddresses 	string
-	OU 		string
+	serialNo         string
+	DNSNames         string
+	emailAddresses   string
+	OU               string
 }
 
 func getEarliestCert(state *tls.ConnectionState) *certInfo {
@@ -35,15 +35,14 @@ func getEarliestCert(state *tls.ConnectionState) *certInfo {
 	for _, cert := range state.PeerCertificates {
 		if (earliest.IsZero() || cert.NotAfter.Before(earliest)) && !cert.NotAfter.IsZero() {
 			earliest = cert.NotAfter
-			result = rectangle {
-				notAfter : cert.notAfter,
-				commonName : cert.Subject.CommonName,
-				issuerCommonName : cert.Issuer.CommonName,
-				serialNo : cert.SerialNumber.String(),
-				DNSNames : cert.DNSNames,
-				emailAddresses : cert.EmailAddresses,
-				IPAddresses : cert.IPAddresses,
-				OU : cert.Subject.OrganizationalUnit
+			result = certInfo{
+				notAfter:         cert.NotAfter,
+				commonName:       cert.Subject.CommonName,
+				issuerCommonName: cert.Issuer.CommonName,
+				serialNo:         cert.SerialNumber.String(),
+				DNSNames:         strings.Join(cert.DNSNames, ","),
+				emailAddresses:   strings.Join(cert.EmailAddresses, ","),
+				OU:               strings.Join(cert.Subject.OrganizationalUnit, ","),
 			}
 		}
 	}
